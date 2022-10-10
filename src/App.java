@@ -1,5 +1,13 @@
+import javax.swing.SwingUtilities;
+
 public class App {
     public static void main(String[] args) throws Exception {
-        System.out.println("Hello, World!");
+        Runnable runApplication = new Runnable() {
+            public void run() {
+                controlador login = new controlador();
+                login.getClass();
+            }
+        };
+        SwingUtilities.invokeLater(runApplication); 
     }
 }
