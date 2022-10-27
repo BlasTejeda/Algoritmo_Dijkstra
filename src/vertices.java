@@ -1,31 +1,36 @@
 public class vertices {
     //ATRIBUTOS
     private String nombre;
-    private String valor;
+    private float valor;
     private float posicionVertical;
     private float posicionHorizontal;
-    private String sigVertice;          //Nombre del vertice siguiente
-    private String antVertice;          //Nombre del vertice anterior
-    private int numeracion;             //Posicion en las matrices
+    private String sigVertice; //Nombre del vertice siguiente
+    private String antVertice; //Nombre del vertice anterior
+    private  int estado; //En que estado del algoritmo esta (Sin visitar (0), pendiente (1), visitado (2))
+    //private boolean adyacencia; //Nos indica si es adyacente a otro vertice
+
+
 
     //CONSTRUCTORES
     public vertices(){
         this.nombre = "";
-        this.valor = "";
+        this.valor = 0.0f;
         this.posicionVertical = 0.0f;
         this.posicionHorizontal = 0.0f;
         this.sigVertice = "";
         this.antVertice = "";
-        this.numeracion = 0;
+        this.estado = 0;
+        //this.adyacencia = false;
     }
-    public vertices(String nombre, String valor, float posicionVertical, float posicionHorizontal, String sigVertice, String antVertice, int numeracion){
+    public vertices(String nombre, float posicionVertical, float posicionHorizontal){
         this.nombre = nombre;
-        this.valor = valor;
+        this.valor = 0.0f;
         this.posicionVertical = posicionVertical;
         this.posicionHorizontal = posicionHorizontal;
-        this.sigVertice = sigVertice;
-        this.antVertice = antVertice;
-        this.numeracion = numeracion;
+        this.sigVertice = "";
+        this.antVertice = "";
+        this.estado = 0;
+        //this.adyacencia = adyacencia;
     }
     public vertices(vertices vertice){
         this.nombre = vertice.nombre;
@@ -34,14 +39,17 @@ public class vertices {
         this.posicionHorizontal = vertice.posicionHorizontal;
         this.sigVertice = vertice.sigVertice;
         this.antVertice = vertice.antVertice;
-        this.numeracion = vertice.numeracion;
+        this.estado = vertice.estado;
+        //this.adyacencia = vertice.adyacencia;
     }
 
-    //ENCAPSULAMIENTO (Set)
+
+
+    //ENCAPSULAMIENTO (SETs & GETs)
     public void setNombre(String nombre){
         this.nombre = nombre;
     }
-    public void setValor(String valor){
+    public void setValor(float valor){
         this.valor = valor;
     }
     public void setPosicionVertical(float posicionVertical){
@@ -56,15 +64,16 @@ public class vertices {
     public void setAntVertice(String antVertice){
         this.antVertice = antVertice;
     }
-    public void setNumeracion(int numeracion){
-        this.numeracion = numeracion;
+    public void setEstado(int estado){
+        this.estado = estado;
     }
-
-    //ENCAPSULAMIENTO (Get)
+    //public void setAdyacencia(Boolean adyacencia){
+    //    this.adyacencia = adyacencia;
+    //}
     public String getNombre(){
         return this.nombre;
     }
-    public String getValor(){
+    public float getValor(){
         return this.valor;
     }
     public float getPosicionVertical(){
@@ -79,7 +88,10 @@ public class vertices {
     public String getAntVertice(){
         return this.antVertice;
     }
-    public int getNumeracion(){
-        return this.numeracion;
+    public int getEstado(){
+        return this.estado;
     }
+    //public Boolean getAdyacencia(){
+    //    return this.adyacencia;
+    //}
 }
