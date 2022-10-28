@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 
 // DESCRIPCIÓN
 //      Clase creada para implementar el Algoritmo de Dijkstra en Java.
@@ -6,10 +7,13 @@ import java.util.ArrayList;
 
 public class algDijkstra {
     //ATRIBUTOS
-    private String verticeInicial; //Necesario antes de ejecutar el algoritmo
-    private String verticeActual; //Utilizado en el proceso
+    private static Scanner scan = new Scanner(System.in);
+
+    private String nombreGrafo; // Nombre del grafo
+    private String verticeInicial; // Necesario antes de ejecutar el algoritmo
+    private String verticeActual; // Utilizado en el proceso
     
-    private ArrayList<String> verticesVisitados; //Registra los vertices visitados en orden
+    private ArrayList<String> verticesVisitados; // Registra los vertices visitados en orden
 
     private ArrayList<vertices> listaVertices;
     private ArrayList<aristas> listaAristas;
@@ -18,13 +22,24 @@ public class algDijkstra {
 
     //CONSTRUCTORES
     public algDijkstra(){
+        this.nombreGrafo = "";
         this.verticeInicial = "";
         this.verticeActual = "";
         this.verticesVisitados = new ArrayList<String>();
         this.listaVertices = new ArrayList<vertices>();
         this.listaAristas = new ArrayList<aristas>();
     }
+    public algDijkstra(String nombre, ArrayList<vertices> listaVertices, ArrayList<aristas> listasAristas){
+        this.verticeInicial = "";
+        this.verticeActual = "";
+        this.verticesVisitados = new ArrayList<String>();
+
+        this.nombreGrafo = nombre;
+        this.listaVertices = listaVertices;
+        this.listaAristas = listasAristas;
+    }
     public algDijkstra(ArrayList<vertices> listaVertices, ArrayList<aristas> listasAristas){
+        this.nombreGrafo = "";
         this.verticeInicial = "";
         this.verticeActual = "";
         this.verticesVisitados = new ArrayList<String>();
@@ -33,6 +48,7 @@ public class algDijkstra {
         this.listaAristas = listasAristas;
     }
     public algDijkstra(algDijkstra algoritmo){
+        this.nombreGrafo = algoritmo.nombreGrafo;
         this.verticeInicial = algoritmo.verticeInicial;
         this.verticeActual = algoritmo.verticeActual;
         this.verticesVisitados = algoritmo.verticesVisitados;
@@ -43,6 +59,12 @@ public class algDijkstra {
 
 
     //ENCAPSULAMIENTO (Gets & Sets)
+    public String getNombreGrafo(){
+        return this.nombreGrafo;
+    }
+    public void setNombreGrafo(String nombreGrafo){
+        this.nombreGrafo = nombreGrafo;
+    }
     public ArrayList<vertices> getListaVertices(){
         return this.listaVertices;
     }
@@ -303,6 +325,7 @@ public class algDijkstra {
         if(listaVertices.size() > 0
         && listaAristas.size() > 0
         && verticeExistente(this.verticeInicial)){
+            estadoInicial();
 
             int cantidadVertices = listaVertices.size();
             int cantidadAristas = listaAristas.size();
@@ -437,8 +460,8 @@ public class algDijkstra {
                 
                 for(int i=0; i<cantidadVertices; i++){
                     if(listaVertices.get(i).getNombre().equals(verticeActual)){
-    
-                        caminoVertices.add(listaVertices.get(i).getNombre());
+                        if(!(listaVertices.get(i).getNombre().equals(nombreVertice)))
+                            caminoVertices.add(listaVertices.get(i).getNombre());
                         verticeActual = listaVertices.get(i).getAntVertice();
                         break;
                     }

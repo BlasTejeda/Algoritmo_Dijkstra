@@ -22,6 +22,16 @@ public class vertices {
         this.estado = 0;
         //this.adyacencia = false;
     }
+    public vertices(String nombre){
+        this.nombre = nombre;
+        this.valor = 0.0f;
+        this.posicionVertical = 0.0f;
+        this.posicionHorizontal = 0.0f;
+        this.sigVertice = "";
+        this.antVertice = "";
+        this.estado = 0;
+        //this.adyacencia = adyacencia;
+    }
     public vertices(String nombre, float posicionVertical, float posicionHorizontal){
         this.nombre = nombre;
         this.valor = 0.0f;

@@ -1,178 +1,358 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class comprobarAlg {
-    //Clase: Algoritmo de Dijkstra
-    private static algDijkstra algoritmo;
-    private static ArrayList<vertices> listaVertices;
-    private static ArrayList<String> listaEstacion; //Nombre de la estación representada en cada vertice
-    private static ArrayList<aristas> listaAristas;
+    private static ArrayList<algDijkstra> listaGrafos = new ArrayList<algDijkstra>();
+    private static Scanner scan = new Scanner(System.in);
+    
 
     public static void main(String[] args) throws Exception {
-        creacionVertices();
-        creacionAristas();
-        algoritmo = new algDijkstra(listaVertices, listaAristas);
+        // Intanciamientos
+        crearGrafo_MetroSoul();
+
+        // Menu principal
+        int respuesta = 0;
+        do{
+            limpiarPantalla();
+            System.out.print(
+                "..::: ALGORITMO DE DIJKSTRA :::..\n\n" +
+                "\t1-. Seleccionar un grafo.\n" +
+                "\t2-. Definir un grafo nuevo\n" +
+                "\t0-. Salir\n\n" +
+                "Seleccion (numero): ");
+            respuesta = scan.nextInt(); scan.nextLine();
+
+            switch(respuesta){
+                // Si quiso seleccionar un grafo ya existente
+                case 1:{
+                    int respuesta2 = 0; // Grafo seleccionado
+
+                    // Menu de grafos existentes
+                    do{
+                        limpiarPantalla();
+                        System.out.println("..::: GRAFOS DISPONIBLES :::..\n");
+                        imprimirListaGrafos();
+                        System.out.print(
+                            "\t0-. Volver\n\n" +
+                            "Seleccion (numero): ");
+                        respuesta2 = scan.nextInt(); scan.nextLine();
+                        
+                        // Si la respuesta señala un grafo existente
+                        if(respuesta2 > 0 && respuesta2 <= listaGrafos.size()){
+                            int respuesta3 = 0;
+
+                            // Menu de manipulacion de grafo
+                            do{
+                                limpiarPantalla();
+                                System.out.println(
+                                    "..::: Grafo - [" +
+                                    listaGrafos.get(respuesta2-1).getNombreGrafo() +
+                                    "] :::..");
+                                imprimirOpcionesGrafo();
+                                System.out.print(
+                                    "\n\t7-. Encontrar camino minimo\n" +
+                                    "\t0-. Volver\n\n" +
+                                    "Seleccion (numero): ");
+                                respuesta3 = scan.nextInt(); scan.nextLine();
+
+                                switch(respuesta3){
+                                    // Si se decea agregar un vertice al grafo
+                                    case 1:{
+                                        aggVerticeGrafo(respuesta2-1);
+                                        break;
+                                    }
+                                    // Si se decea eliminar un vertice al grafo
+                                    case 2:{
+                                        eliminarVerticeGrafo(respuesta2-1);
+                                        break;
+                                    }
+                                    // Mostrar todos los vertices incluidos en el grafo
+                                    case 3:{
+                                        imprimirVerticesGrafo(respuesta2-1);
+                                        break;
+                                    }
+                                    // Si se decea agregar una adyacencia al grafo
+                                    case 4:{
+                                        aggAdyacenciaGrafo(respuesta2-1);
+                                        break;
+                                    }
+                                    // Si se decea eliminar una adyacencia al grafo
+                                    case 5:{
+                                        eliminarAdyacenciaGrafo(respuesta2-1);
+                                        break;
+                                    }
+                                    // Mostrar todos las adyacencias incluidos en el grafo
+                                    case 6:{
+                                        imprimirAdyacenciasGrafo(respuesta2-1);
+                                        break;
+                                    }
+                                    // Si se decea encontrar el camino minimo de un vertice a otro
+                                    case 7:{
+                                        caminoMinimoEntre(respuesta2-1);
+                                        break;
+                                    }
+                                }
+                            }while(respuesta3 != 0);
+                        }
+                    }while(respuesta2 != 0);
+                    break;
+                }
 
 
-        // Ejecutar Algoritmo
-        algoritmo.setVerticeInicial("BB");
-        algoritmo.ejecutar();
-        System.out.println("\n\n\n" + algoritmo.caronte("EE") + "\n\n\n");
+
+                case 2:{
+                    limpiarPantalla();
+                    System.out.println("..::: NUEVO GRAFO :::..\n");
+                    System.out.print("Nombre del grafo: ");
+                    String nombreGrafo = scan.nextLine();
+
+                    algDijkstra nuevoAlgoritmo = new algDijkstra();
+                    nuevoAlgoritmo.setNombreGrafo(nombreGrafo);
+                    listaGrafos.add(nuevoAlgoritmo);
+                    int posicionEnLista = listaGrafos.size()-1;
+
+                    int respuesta2 = 0;
+                    do{
+                        limpiarPantalla();
+                        System.out.println("..::: GRAFO - [" + nombreGrafo + "] :::..\n");
+                        imprimirOpcionesGrafo();
+                        System.out.print(
+                            "\n\t7-. Cancelar\n" +
+                            "\t0-. Guardar\n\n" +
+                            "Seleccion (numero): ");
+                        respuesta2 = scan.nextInt(); scan.nextLine();
+
+                        switch(respuesta2){
+                            // Si se decea agregar un vertice al grafo
+                            case 1:{
+                                aggVerticeGrafo(posicionEnLista);
+                                break;
+                            }
+                            // Si se decea eliminar un vertice al grafo
+                            case 2:{
+                                eliminarVerticeGrafo(posicionEnLista);
+                                break;
+                            }
+                            // Mostrar todos los vertices incluidos en el grafo
+                            case 3:{
+                                imprimirVerticesGrafo(posicionEnLista);
+                                break;
+                            }
+                            // Si se decea agregar una adyacencia al grafo
+                            case 4:{
+                                aggAdyacenciaGrafo(posicionEnLista);
+                                break;
+                            }
+                            // Si se decea eliminar una adyacencia al grafo
+                            case 5:{
+                                eliminarAdyacenciaGrafo(posicionEnLista);
+                                break;
+                            }
+                            // Mostrar todos las adyacencias incluidos en el grafo
+                            case 6:{
+                                imprimirAdyacenciasGrafo(posicionEnLista);
+                                break;
+                            }
+                            // Si se decea encontrar el camino minimo de un vertice a otro
+                            case 7:{
+                                listaGrafos.remove(posicionEnLista);
+                                break;
+                            }
+                        }
+                    }while(respuesta2 != 0  &&  respuesta2 != 7);
+
+                    break;
+                }
+            }
+        }while(respuesta != 0);
     }
 
-    public static void creacionVertices(){
-        //Instanciamiento
-        listaVertices = new ArrayList<vertices>();
-        listaEstacion = new ArrayList<String>();
-        vertices vertAA = new vertices();
-        vertices vertAB = new vertices();
-        vertices vertBA = new vertices();
-        vertices vertBB = new vertices();
-        vertices vertBC = new vertices();
-        vertices vertBD = new vertices();
-        vertices vertBE = new vertices();
-        vertices vertBF = new vertices();
-        vertices vertCA = new vertices();
-        vertices vertCB = new vertices();
-        vertices vertCC = new vertices();
-        vertices vertCD = new vertices();
-        vertices vertDA = new vertices();
-        vertices vertDB = new vertices();
-        vertices vertDC = new vertices();
-        vertices vertEA = new vertices();
-        vertices vertEB = new vertices();
-        vertices vertEC = new vertices();
-        vertices vertED = new vertices();
-        vertices vertEE = new vertices();
-
-        //Valoración
-        vertAA.setNombre("AA");
-        vertAB.setNombre("AB");
-        vertBA.setNombre("BA");
-        vertBB.setNombre("BB");
-        vertBC.setNombre("BC"); //5
-        vertBD.setNombre("BD");
-        vertBE.setNombre("BE");
-        vertBF.setNombre("BF");
-        vertCA.setNombre("CA");
-        vertCB.setNombre("CB"); //10
-        vertCC.setNombre("CC");
-        vertCD.setNombre("CD");
-        vertDA.setNombre("DA");
-        vertDB.setNombre("DB");
-        vertDC.setNombre("DC"); //15
-        vertEA.setNombre("EA");
-        vertEB.setNombre("EB");
-        vertEC.setNombre("EC");
-        vertED.setNombre("ED");
-        vertEE.setNombre("EE"); //20
-
-        //Listado
-        listaVertices.add(vertAA);
-        listaEstacion.add("Guro");
-        listaVertices.add(vertAB);
-        listaEstacion.add("Gasan Digital Complex");
-        listaVertices.add(vertBA);
-        listaEstacion.add("Hongik Univ");
-        listaVertices.add(vertBB);
-        listaEstacion.add("Hapjeong");
-        listaVertices.add(vertBC);
-        listaEstacion.add("Dangsan");
-        listaVertices.add(vertBD);
-        listaEstacion.add("Yengdungpo-gu Office");
-        listaVertices.add(vertBE);
-        listaEstacion.add("Sindorim");
-        listaVertices.add(vertBF);
-        listaEstacion.add("Sinpung");
-        listaVertices.add(vertCA);
-        listaEstacion.add("Chungjeongno");
-        listaVertices.add(vertCB);
-        listaEstacion.add("Gongdeok");
-        listaVertices.add(vertCC);
-        listaEstacion.add("Yeouido");
-        listaVertices.add(vertCD);
-        listaEstacion.add("Singi");
-        listaVertices.add(vertDA);
-        listaEstacion.add("");
-        listaVertices.add(vertDB);
-        listaEstacion.add("");
-        listaVertices.add(vertDC);
-        listaEstacion.add("");
-        listaVertices.add(vertEA);
-        listaEstacion.add("");
-        listaVertices.add(vertEB);
-        listaEstacion.add("");
-        listaVertices.add(vertEC);
-        listaEstacion.add("");
-        listaVertices.add(vertED);
-        listaEstacion.add("");
-        listaVertices.add(vertEE);
-        listaEstacion.add("");
+    // Limpiar consola
+    private static void limpiarPantalla(){
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 
-    public static void creacionAristas(){
-        //Instanciamiento
-        listaAristas = new ArrayList<aristas>();
-        aristas arista1 = new aristas("1", 2, "AA", "AB");
-        aristas arista2 = new aristas("2", 2, "AA", "BE");
-        aristas arista3 = new aristas("3", 4, "AB", "BF");
-        aristas arista4 = new aristas("4", 8, "BA", "CA");
-        aristas arista5 = new aristas("5", 2, "BA", "BB");
-        aristas arista6 = new aristas("6", 3, "BB", "BC");
-        aristas arista7 = new aristas("7", 2, "BC", "BD");
-        aristas arista8 = new aristas("8", 4, "BD", "BE");
-        aristas arista9 = new aristas("9", 8, "BB", "CB");
-        aristas arista10 = new aristas("10", 6, "BC", "CC");
-        aristas arista11 = new aristas("11", 4, "BD", "CD");
-        aristas arista12 = new aristas("12", 2, "BE", "CD");
-        aristas arista13 = new aristas("13", 2, "BE", "BF");
-        aristas arista14 = new aristas("14", 16, "BF", "ED");
-        aristas arista15 = new aristas("15", 12, "BF", "EE");
-        aristas arista16 = new aristas("16", 4, "CA", "CB");
-        aristas arista17 = new aristas("17", 7, "CB", "CC");
-        aristas arista18 = new aristas("18", 1, "CC", "CD");
-        aristas arista19 = new aristas("19", 7, "DA", "DB");
-        aristas arista20 = new aristas("20", 5, "CB", "EA");
-        aristas arista21 = new aristas("21", 3, "DB", "DC");
-        aristas arista22 = new aristas("22", 4, "CC", "DC");
-        aristas arista23 = new aristas("23", 4, "CD", "DC");
-        aristas arista24 = new aristas("24", 3, "DB", "EB");
-        aristas arista25 = new aristas("25", 6, "DC", "EC");
-        aristas arista26 = new aristas("26", 4, "DA", "EA");
-        aristas arista27 = new aristas("27", 4, "EA", "EB");
-        aristas arista28 = new aristas("28", 2, "EB", "EC");
-        aristas arista29 = new aristas("29", 4, "EC", "ED");
-        aristas arista30 = new aristas("30", 2, "ED", "EE");
+    // Imprimir lista de grafos almacenados
+    private static void imprimirListaGrafos(){
+        int cantidadGrafos =  listaGrafos.size();
 
-        //Listado
-        listaAristas.add(arista1);
-        listaAristas.add(arista2);
-        listaAristas.add(arista3);
-        listaAristas.add(arista4);
-        listaAristas.add(arista5); //5
-        listaAristas.add(arista6);
-        listaAristas.add(arista7);
-        listaAristas.add(arista8);
-        listaAristas.add(arista9);
-        listaAristas.add(arista10); //10
-        listaAristas.add(arista11);
-        listaAristas.add(arista12);
-        listaAristas.add(arista13);
-        listaAristas.add(arista14);
-        listaAristas.add(arista15); //15
-        listaAristas.add(arista16);
-        listaAristas.add(arista17);
-        listaAristas.add(arista18);
-        listaAristas.add(arista19);
-        listaAristas.add(arista20); //20
-        listaAristas.add(arista21);
-        listaAristas.add(arista22);
-        listaAristas.add(arista23);
-        listaAristas.add(arista24);
-        listaAristas.add(arista25); //25
-        listaAristas.add(arista26);
-        listaAristas.add(arista27);
-        listaAristas.add(arista28);
-        listaAristas.add(arista29);
-        listaAristas.add(arista30); //30
+        for(int i=0;
+            i<cantidadGrafos;
+            System.out.print("\t" + (i+1) + "-. " + listaGrafos.get(i).getNombreGrafo() + "\n"),
+            i++);
+    }
+
+    private static void imprimirOpcionesGrafo(){
+        System.out.println(
+            "\t1-. Agregar vertice\n" +
+            "\t2-. Eliminar vertice\n" +
+            "\t3-. Mostrar vertices\n\n" +
+            "\t4-. Agregar adyacencia\n" +
+            "\t5-. Eliminar adyacencia\n" +
+            "\t6-. Mostrar adyacencias");
+    }
+
+    private static void aggVerticeGrafo(int posicionGrafo){
+        limpiarPantalla();
+        System.out.print(
+            "..::: AGREGAR VERTICE - [" +
+            listaGrafos.get(posicionGrafo).getNombreGrafo() +
+            "] :::..\n\n" +
+            "Nombre: ");
+
+        String nombreVertice = scan.nextLine();
+        listaGrafos.get(posicionGrafo).aggVertice(new vertices(nombreVertice));
+    }
+
+    private static void eliminarVerticeGrafo(int posicionGrafo){
+        limpiarPantalla();
+        System.out.print(
+            "..::: ELIMINAR VERTICE - [" +
+            listaGrafos.get(posicionGrafo).getNombreGrafo() +
+            "] :::..\n\n" +
+            "Nombre: ");
+
+        String nombreVertice = scan.nextLine();
+        listaGrafos.get(posicionGrafo).eliminarVertice(nombreVertice);
+    }
+    
+    private static void aggAdyacenciaGrafo(int posicionGrafo){
+        limpiarPantalla();
+        System.out.print(
+            "..::: AGREGAR ADYACENCIA - [" +
+            listaGrafos.get(posicionGrafo).getNombreGrafo() +
+            "] :::..\n\n" +
+            "Nombre: ");
+        String nombreAdyacencia = scan.nextLine();
+
+        System.out.print("\nValor (numerico): ");
+        float valorAdyacencia = scan.nextFloat(); scan.nextLine();
+
+        System.out.print("\nNombre del vertice origen\n: ");
+        String nombreVerticeOrigen = scan.nextLine();
+        
+        System.out.print("\nNombre del vertice destino\n: ");
+        String nombreVerticeDestino = scan.nextLine();
+
+        listaGrafos.get(posicionGrafo).aggAdyacencia(new aristas(nombreAdyacencia, valorAdyacencia, nombreVerticeOrigen, nombreVerticeDestino));
+    }
+
+    private static void eliminarAdyacenciaGrafo(int posicionGrafo){
+        limpiarPantalla();
+        System.out.print(
+            "..::: ELIMINAR ADYACENCIA - [" +
+            listaGrafos.get(posicionGrafo).getNombreGrafo() +
+            "] :::..\n\n" +
+            "Nombre: ");
+
+        String nombreAdyacencia = scan.nextLine();
+        listaGrafos.get(posicionGrafo).eliminarAdyacencia(nombreAdyacencia);
+    }
+
+    private static void caminoMinimoEntre(int posicionGrafo){
+        limpiarPantalla();
+        System.out.print("..::: CAMINO DE MINIMO :::..\n\n");
+
+        System.out.print("Nodo origen: ");
+        String nodoOrigen = scan.nextLine();
+        
+        System.out.print("Nodo destino: ");
+        String nodoDestino = scan.nextLine();
+
+        listaGrafos.get(posicionGrafo).setVerticeInicial(nodoOrigen);
+        listaGrafos.get(posicionGrafo).ejecutar();
+        ArrayList<String> camino = listaGrafos.get(posicionGrafo).caronte(nodoDestino);
+
+       System.out.println("\n\nRecorrido:\n\t" + camino);
+        scan.nextLine();
+    }
+
+    private static void imprimirVerticesGrafo(int posicionGrafo){
+        limpiarPantalla();
+        System.out.println("..::: VERTICES - [" + listaGrafos.get(posicionGrafo).getNombreGrafo() + "] :::..\n");
+
+        int cantVert = listaGrafos.get(posicionGrafo).getListaVertices().size();
+        for(int i=0; i<cantVert; i++){
+            System.out.println(
+                (i+1) + "-. " +
+                listaGrafos.get(posicionGrafo).getListaVertices().get(i).getNombre());
+        }
+        System.out.print("\n");
+        scan.nextLine();
+    }
+
+    private static void imprimirAdyacenciasGrafo(int posicionGrafo){
+        limpiarPantalla();
+        System.out.println("..::: ADYACENCIAS - [" + listaGrafos.get(posicionGrafo).getNombreGrafo() + "] :::..\n");
+
+        int cantAristas = listaGrafos.get(posicionGrafo).getListaAristas().size();
+        for(int i=0; i<cantAristas; i++){
+            System.out.println(
+                listaGrafos.get(posicionGrafo).getListaAristas().get(i).getNombre() +
+                ": " + listaGrafos.get(posicionGrafo).getListaAristas().get(i).getValor() +
+                ", " + listaGrafos.get(posicionGrafo).getListaAristas().get(i).getNodoOrigen() +
+                "-" + listaGrafos.get(posicionGrafo).getListaAristas().get(i).getNodoDestino());
+        }
+        System.out.print("\n");
+        scan.nextLine();
+    }
+    
+    // Creación del grafo: METRO DE SOUL
+    private static void crearGrafo_MetroSoul(){
+        algDijkstra metroSoul = new algDijkstra();
+        metroSoul.setNombreGrafo("Metro de Soul");
+        metroSoul.aggVertice(new vertices("AA"));
+        metroSoul.aggVertice(new vertices("AB"));
+        metroSoul.aggVertice(new vertices("BA"));
+        metroSoul.aggVertice(new vertices("BB"));
+        metroSoul.aggVertice(new vertices("BC"));
+        metroSoul.aggVertice(new vertices("BD"));
+        metroSoul.aggVertice(new vertices("BE"));
+        metroSoul.aggVertice(new vertices("BF"));
+        metroSoul.aggVertice(new vertices("CA"));
+        metroSoul.aggVertice(new vertices("CB"));
+        metroSoul.aggVertice(new vertices("CC"));
+        metroSoul.aggVertice(new vertices("CD"));
+        metroSoul.aggVertice(new vertices("DA"));
+        metroSoul.aggVertice(new vertices("DB"));
+        metroSoul.aggVertice(new vertices("DC"));
+        metroSoul.aggVertice(new vertices("EA"));
+        metroSoul.aggVertice(new vertices("EB"));
+        metroSoul.aggVertice(new vertices("EC"));
+        metroSoul.aggVertice(new vertices("ED"));
+        metroSoul.aggVertice(new vertices("EE"));
+        metroSoul.aggAdyacencia(new aristas("arista1", 2, "AA", "AB"));
+        metroSoul.aggAdyacencia(new aristas("arista2", 2, "AA", "BE"));
+        metroSoul.aggAdyacencia(new aristas("arista3", 4, "AB", "BF"));
+        metroSoul.aggAdyacencia(new aristas("arista4", 8, "BA", "CA"));
+        metroSoul.aggAdyacencia(new aristas("arista5", 2, "BA", "BB"));
+        metroSoul.aggAdyacencia(new aristas("arista6", 3, "BB", "BC"));
+        metroSoul.aggAdyacencia(new aristas("arista7", 2, "BC", "BD"));
+        metroSoul.aggAdyacencia(new aristas("arista8", 4, "BD", "BE"));
+        metroSoul.aggAdyacencia(new aristas("arista9", 8, "BB", "CB"));
+        metroSoul.aggAdyacencia(new aristas("arista10", 6, "BC", "CC"));
+        metroSoul.aggAdyacencia(new aristas("arista11", 4, "BD", "CD"));
+        metroSoul.aggAdyacencia(new aristas("arista12", 2, "BE", "CD"));
+        metroSoul.aggAdyacencia(new aristas("arista13", 2, "BE", "BF"));
+        metroSoul.aggAdyacencia(new aristas("arista14", 16, "BF", "ED"));
+        metroSoul.aggAdyacencia(new aristas("arista15", 12, "BF", "EE"));
+        metroSoul.aggAdyacencia(new aristas("arista16", 4, "CA", "CB"));
+        metroSoul.aggAdyacencia(new aristas("arista17", 7, "CB", "CC"));
+        metroSoul.aggAdyacencia(new aristas("arista18", 1, "CC", "CD"));
+        metroSoul.aggAdyacencia(new aristas("arista19", 7, "DA", "DB"));
+        metroSoul.aggAdyacencia(new aristas("arista20", 5, "CB", "EA"));
+        metroSoul.aggAdyacencia(new aristas("arista21", 3, "DB", "DC"));
+        metroSoul.aggAdyacencia(new aristas("arista22", 4, "CC", "DC"));
+        metroSoul.aggAdyacencia(new aristas("arista23", 4, "CD", "DC"));
+        metroSoul.aggAdyacencia(new aristas("arista24", 3, "DB", "EB"));
+        metroSoul.aggAdyacencia(new aristas("arista24", 3, "DB", "EB"));
+        metroSoul.aggAdyacencia(new aristas("arista26", 4, "DA", "EA"));
+        metroSoul.aggAdyacencia(new aristas("arista27", 4, "EA", "EB"));
+        metroSoul.aggAdyacencia(new aristas("arista28", 2, "EB", "EC"));
+        metroSoul.aggAdyacencia(new aristas("arista29", 4, "EC", "ED"));
+        metroSoul.aggAdyacencia(new aristas("arista30", 2, "ED", "EE"));
+
+        listaGrafos.add(metroSoul);
     }
 }
