@@ -104,7 +104,7 @@ public class algDijkstra {
 
         int cantidadVertices = listaVertices.size();
         for(int i=0; i<cantidadVertices; i++){
-            listaAristas.get(i).setValor(0.0f);
+            listaVertices.get(i).setValor(0.0f);
             listaVertices.get(i).setSigVertice("");
             listaVertices.get(i).setAntVertice("");
             listaVertices.get(i).setEstado(0);
@@ -469,6 +469,7 @@ public class algDijkstra {
             }
         }
 
+        
         return caminoVertices;
     }
 }
