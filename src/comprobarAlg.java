@@ -3,6 +3,7 @@ import java.util.Scanner;
 
 public class comprobarAlg {
     private static ArrayList<algDijkstra> listaGrafos = new ArrayList<algDijkstra>();
+    private static capturaDatos captura = new capturaDatos();
     private static Scanner scan = new Scanner(System.in);
     
 
@@ -11,7 +12,7 @@ public class comprobarAlg {
         crearGrafo_MetroSoul();
 
         // Menu principal
-        int respuesta = 0;
+        String respuesta = "";
         do{
             limpiarPantalla();
             System.out.print(
@@ -20,87 +21,94 @@ public class comprobarAlg {
                 "\t2-. Definir un grafo nuevo\n" +
                 "\t0-. Salir\n\n" +
                 "Seleccion (numero): ");
-            respuesta = scan.nextInt(); scan.nextLine();
+            respuesta = scan.nextLine();
 
             switch(respuesta){
                 // Si quiso seleccionar un grafo ya existente
-                case 1:{
-                    int respuesta2 = 0; // Grafo seleccionado
+                case "1":{
+                    String respuesta2 = ""; // Grafo seleccionado
 
                     // Menu de grafos existentes
                     do{
                         limpiarPantalla();
                         System.out.println("..::: GRAFOS DISPONIBLES :::..\n");
                         imprimirListaGrafos();
-                        System.out.print(
+                        System.out.println(
                             "\t0-. Volver\n\n" +
                             "Seleccion (numero): ");
-                        respuesta2 = scan.nextInt(); scan.nextLine();
                         
+                        char[] alfabetoSelGrafo = crearAlfabetoLista(listaGrafos.size());
+                        captura = new capturaDatos(alfabetoSelGrafo);
+                        respuesta2 = captura.capturar(2);
+                        int respuesta2INT = Integer.parseInt(respuesta2);
+
                         // Si la respuesta señala un grafo existente
-                        if(respuesta2 > 0 && respuesta2 <= listaGrafos.size()){
-                            int respuesta3 = 0;
-
-                            // Menu de manipulacion de grafo
-                            do{
-                                limpiarPantalla();
-                                System.out.println(
-                                    "..::: Grafo - [" +
-                                    listaGrafos.get(respuesta2-1).getNombreGrafo() +
-                                    "] :::..");
-                                imprimirOpcionesGrafo();
-                                System.out.print(
-                                    "\n\t7-. Encontrar camino minimo\n" +
-                                    "\t0-. Volver\n\n" +
-                                    "Seleccion (numero): ");
-                                respuesta3 = scan.nextInt(); scan.nextLine();
-
-                                switch(respuesta3){
-                                    // Si se decea agregar un vertice al grafo
-                                    case 1:{
-                                        aggVerticeGrafo(respuesta2-1);
-                                        break;
-                                    }
-                                    // Si se decea eliminar un vertice al grafo
-                                    case 2:{
-                                        eliminarVerticeGrafo(respuesta2-1);
-                                        break;
-                                    }
-                                    // Mostrar todos los vertices incluidos en el grafo
-                                    case 3:{
-                                        imprimirVerticesGrafo(respuesta2-1);
-                                        break;
-                                    }
-                                    // Si se decea agregar una adyacencia al grafo
-                                    case 4:{
-                                        aggAdyacenciaGrafo(respuesta2-1);
-                                        break;
-                                    }
-                                    // Si se decea eliminar una adyacencia al grafo
-                                    case 5:{
-                                        eliminarAdyacenciaGrafo(respuesta2-1);
-                                        break;
-                                    }
-                                    // Mostrar todos las adyacencias incluidos en el grafo
-                                    case 6:{
-                                        imprimirAdyacenciasGrafo(respuesta2-1);
-                                        break;
-                                    }
-                                    // Si se decea encontrar el camino minimo de un vertice a otro
-                                    case 7:{
-                                        caminoMinimoEntre(respuesta2-1);
-                                        break;
-                                    }
-                                }
-                            }while(respuesta3 != 0);
-                        }
-                    }while(respuesta2 != 0);
+                        //if(verificarExistenciaGrafo(listaGrafos.get(respuesta2INT).getNombreGrafo())){
+                        //    int respuesta3 = 0;
+//
+                        //    // Menu de manipulacion de grafo
+                        //    do{
+                        //        limpiarPantalla();
+                        //        System.out.println(
+                        //            "..::: Grafo - [" +
+                        //            listaGrafos.get(respuesta2INT-1).getNombreGrafo() +
+                        //            "] :::..");
+                        //        imprimirOpcionesGrafo();
+                        //        System.out.print(
+                        //            "\n\t7-. Encontrar camino minimo\n" +
+                        //            "\t0-. Volver\n\n" +
+                        //            "Seleccion (numero): ");
+                        //        respuesta3 = scan.nextInt(); scan.nextLine();
+//
+                        //        switch(respuesta3){
+                        //            // Si se decea agregar un vertice al grafo
+                        //            case 1:{
+                        //                aggVerticeGrafo(respuesta2INT-1);
+                        //                break;
+                        //            }
+                        //            // Si se decea eliminar un vertice al grafo
+                        //            case 2:{
+                        //                eliminarVerticeGrafo(respuesta2INT-1);
+                        //                break;
+                        //            }
+                        //            // Mostrar todos los vertices incluidos en el grafo
+                        //            case 3:{
+                        //                imprimirVerticesGrafo(respuesta2INT-1);
+                        //                break;
+                        //            }
+                        //            // Si se decea agregar una adyacencia al grafo
+                        //            case 4:{
+                        //                aggAdyacenciaGrafo(respuesta2INT-1);
+                        //                break;
+                        //            }
+                        //            // Si se decea eliminar una adyacencia al grafo
+                        //            case 5:{
+                        //                eliminarAdyacenciaGrafo(respuesta2INT-1);
+                        //                break;
+                        //            }
+                        //            // Mostrar todos las adyacencias incluidos en el grafo
+                        //            case 6:{
+                        //                imprimirAdyacenciasGrafo(respuesta2INT-1);
+                        //                break;
+                        //            }
+                        //            // Si se decea encontrar el camino minimo de un vertice a otro
+                        //            case 7:{
+                        //                caminoMinimoEntre(respuesta2INT-1);
+                        //                break;
+                        //            }
+                        //        }
+                        //    }while(respuesta3 != 0);
+                        //}
+                        
+                        
+                        
+                    }while(!(respuesta2.equals("0")));
                     break;
                 }
 
 
 
-                case 2:{
+                case "2":{
                     limpiarPantalla();
                     System.out.println("..::: NUEVO GRAFO :::..\n");
                     System.out.print("Nombre del grafo: ");
@@ -164,7 +172,7 @@ public class comprobarAlg {
                     break;
                 }
             }
-        }while(respuesta != 0);
+        }while(!(respuesta.equals("0")));
     }
 
     // Limpiar consola
@@ -297,6 +305,48 @@ public class comprobarAlg {
         System.out.print("\n");
         scan.nextLine();
     }
+
+
+
+    // Verificar si existe un grafo en this.listaGrafos
+    private static boolean verificarExistenciaGrafo(String nombreGrafo){
+        boolean existencia = false;
+        
+        if(!(nombreGrafo.equals(""))){
+            int cantidadGrafos = listaGrafos.size();
+
+            for(int i=0; i<cantidadGrafos; i++){
+                if(listaGrafos.get(i).getNombreGrafo().equals(nombreGrafo)){
+                    existencia = true;
+                    break;
+                }
+            }
+        }
+
+        return existencia;
+    }
+
+
+
+    // Crear alfabeto para listas
+    private static char[] crearAlfabetoLista(int cantidadOpciones){
+        int cant = 0;
+        if(cantidadOpciones > 9)
+            cant = 9;
+        else if (cant < 0)
+            cant = 0;
+        
+        char[] alfabeto = new char[cant];
+        
+        for(int i=0;
+            i<cant && i<10;
+            alfabeto[i] = (char)(i+1),
+            i++);
+        
+        return alfabeto;
+    }
+
+
     
     // Creación del grafo: METRO DE SOUL
     private static void crearGrafo_MetroSoul(){
