@@ -2,10 +2,18 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class comprobarAlg {
-    private static ArrayList<algDijkstra> listaGrafos = new ArrayList<algDijkstra>();
-    private static capturaDatos captura = new capturaDatos();
+    // DECLARACIONES
     private static Scanner scan = new Scanner(System.in);
-    
+    // Algoritmo de Dijkstra
+    private static ArrayList<algDijkstra> listaGrafos = new ArrayList<algDijkstra>();
+    // Automata
+    private static capturaDatos automata = new capturaDatos();
+    private static char[] alfabetoListas = new char[0];
+    private static char[] alfabetoNombres = {'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h', 'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'Ñ', 'ñ', 'O', 'o', 'P', 'p', 'Q', 'q', 'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'X', 'x', 'Y', 'y', 'Z', 'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', (char)(32)};
+    private static char[] alfabetoVertices = new char[0];
+    private static char[] alfabetoAristas = new char[0];
+
+
 
     public static void main(String[] args) throws Exception {
         // Intanciamientos
@@ -21,7 +29,11 @@ public class comprobarAlg {
                 "\t2-. Definir un grafo nuevo\n" +
                 "\t0-. Salir\n\n" +
                 "Seleccion (numero): ");
-            respuesta = scan.nextLine();
+
+            // VALIDACIÓN - AUTOMATA
+            alfabetoListas = crearAlfabetoLista(2);
+            automata = new capturaDatos(alfabetoListas);
+            respuesta = automata.capturar(2);
 
             switch(respuesta){
                 // Si quiso seleccionar un grafo ya existente
@@ -33,75 +45,77 @@ public class comprobarAlg {
                         limpiarPantalla();
                         System.out.println("..::: GRAFOS DISPONIBLES :::..\n");
                         imprimirListaGrafos();
-                        System.out.println(
+                        System.out.print(
                             "\t0-. Volver\n\n" +
                             "Seleccion (numero): ");
                         
-                        char[] alfabetoSelGrafo = crearAlfabetoLista(listaGrafos.size());
-                        captura = new capturaDatos(alfabetoSelGrafo);
-                        respuesta2 = captura.capturar(2);
-                        int respuesta2INT = Integer.parseInt(respuesta2);
+                        // VALIDACIÓN - AUTOMATA
+                        alfabetoListas = crearAlfabetoLista(listaGrafos.size());
+                        automata = new capturaDatos(alfabetoListas);
+                        respuesta2 = automata.capturar(2);
+                        
+                        // Si el automata acepto la cadena
+                        if(!(respuesta2.equals(""))){
+                            int grafoSeleccionado = Integer.parseInt(respuesta2)-1;
 
-                        // Si la respuesta señala un grafo existente
-                        //if(verificarExistenciaGrafo(listaGrafos.get(respuesta2INT).getNombreGrafo())){
-                        //    int respuesta3 = 0;
-//
-                        //    // Menu de manipulacion de grafo
-                        //    do{
-                        //        limpiarPantalla();
-                        //        System.out.println(
-                        //            "..::: Grafo - [" +
-                        //            listaGrafos.get(respuesta2INT-1).getNombreGrafo() +
-                        //            "] :::..");
-                        //        imprimirOpcionesGrafo();
-                        //        System.out.print(
-                        //            "\n\t7-. Encontrar camino minimo\n" +
-                        //            "\t0-. Volver\n\n" +
-                        //            "Seleccion (numero): ");
-                        //        respuesta3 = scan.nextInt(); scan.nextLine();
-//
-                        //        switch(respuesta3){
-                        //            // Si se decea agregar un vertice al grafo
-                        //            case 1:{
-                        //                aggVerticeGrafo(respuesta2INT-1);
-                        //                break;
-                        //            }
-                        //            // Si se decea eliminar un vertice al grafo
-                        //            case 2:{
-                        //                eliminarVerticeGrafo(respuesta2INT-1);
-                        //                break;
-                        //            }
-                        //            // Mostrar todos los vertices incluidos en el grafo
-                        //            case 3:{
-                        //                imprimirVerticesGrafo(respuesta2INT-1);
-                        //                break;
-                        //            }
-                        //            // Si se decea agregar una adyacencia al grafo
-                        //            case 4:{
-                        //                aggAdyacenciaGrafo(respuesta2INT-1);
-                        //                break;
-                        //            }
-                        //            // Si se decea eliminar una adyacencia al grafo
-                        //            case 5:{
-                        //                eliminarAdyacenciaGrafo(respuesta2INT-1);
-                        //                break;
-                        //            }
-                        //            // Mostrar todos las adyacencias incluidos en el grafo
-                        //            case 6:{
-                        //                imprimirAdyacenciasGrafo(respuesta2INT-1);
-                        //                break;
-                        //            }
-                        //            // Si se decea encontrar el camino minimo de un vertice a otro
-                        //            case 7:{
-                        //                caminoMinimoEntre(respuesta2INT-1);
-                        //                break;
-                        //            }
-                        //        }
-                        //    }while(respuesta3 != 0);
-                        //}
-                        
-                        
-                        
+                            // Si la respuesta señala un grafo existente
+                            if(listaGrafos.size() > grafoSeleccionado && grafoSeleccionado >= 0){
+                                int respuesta3 = 0;
+    
+                                // Menu de manipulacion de grafo
+                                do{
+                                    limpiarPantalla();
+                                    System.out.println(
+                                        "..::: Grafo - [" +
+                                        listaGrafos.get(grafoSeleccionado).getNombreGrafo() +
+                                        "] :::..");
+                                    imprimirOpcionesGrafo();
+                                    System.out.print(
+                                        "\n\t7-. Encontrar camino minimo\n" +
+                                        "\t0-. Volver\n\n" +
+                                        "Seleccion (numero): ");
+                                    respuesta3 = scan.nextInt(); scan.nextLine();
+    
+                                    switch(respuesta3){
+                                        // Si se decea agregar un vertice al grafo
+                                        case 1:{
+                                            aggVerticeGrafo(grafoSeleccionado);
+                                            break;
+                                        }
+                                        // Si se decea eliminar un vertice al grafo
+                                        case 2:{
+                                            eliminarVerticeGrafo(grafoSeleccionado);
+                                            break;
+                                        }
+                                        // Mostrar todos los vertices incluidos en el grafo
+                                        case 3:{
+                                            imprimirVerticesGrafo(grafoSeleccionado);
+                                            break;
+                                        }
+                                        // Si se decea agregar una adyacencia al grafo
+                                        case 4:{
+                                            aggAdyacenciaGrafo(grafoSeleccionado);
+                                            break;
+                                        }
+                                        // Si se decea eliminar una adyacencia al grafo
+                                        case 5:{
+                                            eliminarAdyacenciaGrafo(grafoSeleccionado);
+                                            break;
+                                        }
+                                        // Mostrar todos las adyacencias incluidos en el grafo
+                                        case 6:{
+                                            imprimirAdyacenciasGrafo(grafoSeleccionado);
+                                            break;
+                                        }
+                                        // Si se decea encontrar el camino minimo de un vertice a otro
+                                        case 7:{
+                                            caminoMinimoEntre(grafoSeleccionado);
+                                            break;
+                                        }
+                                    }
+                                }while(respuesta3 != 0);
+                            }
+                        }
                     }while(!(respuesta2.equals("0")));
                     break;
                 }
@@ -109,12 +123,17 @@ public class comprobarAlg {
 
 
                 case "2":{
-                    limpiarPantalla();
-                    System.out.println("..::: NUEVO GRAFO :::..\n");
-                    System.out.print("Nombre del grafo: ");
-                    String nombreGrafo = scan.nextLine();
-
                     algDijkstra nuevoAlgoritmo = new algDijkstra();
+                    automata = new capturaDatos(alfabetoNombres);
+                    String nombreGrafo;
+
+                    do{
+                        limpiarPantalla();
+                        System.out.println("..::: NUEVO GRAFO :::..\n");
+                        System.out.print("Nombre del grafo: ");
+                        nombreGrafo = automata.capturar(25); // VALIDACIÓN - AUTOMATA
+                    } while(nombreGrafo.equals(""));
+
                     nuevoAlgoritmo.setNombreGrafo(nombreGrafo);
                     listaGrafos.add(nuevoAlgoritmo);
                     int posicionEnLista = listaGrafos.size()-1;
@@ -202,14 +221,20 @@ public class comprobarAlg {
     }
 
     private static void aggVerticeGrafo(int posicionGrafo){
-        limpiarPantalla();
-        System.out.print(
-            "..::: AGREGAR VERTICE - [" +
-            listaGrafos.get(posicionGrafo).getNombreGrafo() +
-            "] :::..\n\n" +
-            "Nombre: ");
+        automata = new capturaDatos(alfabetoNombres);
+        String nombreVertice;
 
-        String nombreVertice = scan.nextLine();
+        do{
+            limpiarPantalla();
+            System.out.print(
+                "..::: AGREGAR VERTICE - [" +
+                listaGrafos.get(posicionGrafo).getNombreGrafo() +
+                "] :::..\n\n" +
+                "Nombre: ");
+            
+            nombreVertice = automata.capturar(15);
+        } while(nombreVertice.equals(""));
+
         listaGrafos.get(posicionGrafo).aggVertice(new vertices(nombreVertice));
     }
 
@@ -226,22 +251,45 @@ public class comprobarAlg {
     }
     
     private static void aggAdyacenciaGrafo(int posicionGrafo){
+        String nombreAdyacencia;
+        float valorAdyacencia;
+        String nombreVerticeOrigen;
+        String nombreVerticeDestino;
+
+        automata = new capturaDatos(alfabetoNombres);
+        do{
+            limpiarPantalla();
+            System.out.print(
+                "..::: AGREGAR ADYACENCIA - [" +
+                listaGrafos.get(posicionGrafo).getNombreGrafo() +
+                "] :::..\n\n" +
+                "Nombre: ");
+            nombreAdyacencia = automata.capturar(15);
+        } while(nombreAdyacencia.equals(""));
+
         limpiarPantalla();
         System.out.print(
             "..::: AGREGAR ADYACENCIA - [" +
             listaGrafos.get(posicionGrafo).getNombreGrafo() +
             "] :::..\n\n" +
-            "Nombre: ");
-        String nombreAdyacencia = scan.nextLine();
+            "Valor (numerico): ");
+        valorAdyacencia = scan.nextFloat(); scan.nextLine();
 
-        System.out.print("\nValor (numerico): ");
-        float valorAdyacencia = scan.nextFloat(); scan.nextLine();
-
-        System.out.print("\nNombre del vertice origen\n: ");
-        String nombreVerticeOrigen = scan.nextLine();
+        limpiarPantalla();
+        System.out.print(
+            "..::: AGREGAR ADYACENCIA - [" +
+            listaGrafos.get(posicionGrafo).getNombreGrafo() +
+            "] :::..\n\n" +
+            "Nombre del vertice ORIGEN\n: ");
+        nombreVerticeOrigen = scan.nextLine();
         
-        System.out.print("\nNombre del vertice destino\n: ");
-        String nombreVerticeDestino = scan.nextLine();
+        limpiarPantalla();
+        System.out.print(
+            "..::: AGREGAR ADYACENCIA - [" +
+            listaGrafos.get(posicionGrafo).getNombreGrafo() +
+            "] :::..\n\n" +
+            "Nombre del vertice DESTINO\n: ");
+        nombreVerticeDestino = scan.nextLine();
 
         listaGrafos.get(posicionGrafo).aggAdyacencia(new aristas(nombreAdyacencia, valorAdyacencia, nombreVerticeOrigen, nombreVerticeDestino));
     }
@@ -330,21 +378,37 @@ public class comprobarAlg {
 
     // Crear alfabeto para listas
     private static char[] crearAlfabetoLista(int cantidadOpciones){
-        int cant = 0;
+        int cant = cantidadOpciones;
+
         if(cantidadOpciones > 9)
             cant = 9;
         else if (cant < 0)
             cant = 0;
         
-        char[] alfabeto = new char[cant];
+        char[] alfabeto = new char[cant+1];
         
         for(int i=0;
-            i<cant && i<10;
-            alfabeto[i] = (char)(i+1),
+            i<=cant && i<10;
+            alfabeto[i] = (char)(i+48),
             i++);
         
         return alfabeto;
     }
+
+
+    // Obtiene el alfabeto de vertices de un algoritmo
+    //private char[] obtenerAlfabetoVertices(ArrayList<vertices> listaVertices){
+    //    ArrayList<char[]> listaCaracteres = new ArrayList<char[]>();
+    //    int cantidadVertices = listaVertices.size();
+//
+    //    for(int i=0; i<cantidadVertices; i++){
+    //        String nombreVertice = listaVertices.get(i).getNombre();
+//
+    //        for()
+    //    }
+    //    
+//
+    //}
 
 
     
